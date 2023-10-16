@@ -1057,6 +1057,11 @@ class CountVectorizer(_VectorizerMixin, BaseEstimator):
 
         This parameter is ignored if vocabulary is not None.
 
+    save_removed_terms : bool, default=True
+        If True, attribute ``stop_words_`` will be generated with terms removed
+        during pruning and will be pickled with model unless explicity deleted
+        beforehand.
+
     vocabulary : Mapping or iterable, default=None
         Either a Mapping (e.g., a dict) where keys are terms and values are
         indices in the feature matrix, or an iterable over terms. If not
@@ -1102,7 +1107,9 @@ class CountVectorizer(_VectorizerMixin, BaseEstimator):
     -----
     The ``stop_words_`` attribute can get large and increase the model size
     when pickling. This attribute is provided only for introspection and can
-    be safely removed using delattr or set to None before pickling.
+    be safely removed using delattr or set to None before pickling. Use
+    parameter ``save_removed_terms=False`` to forego creation and serialization
+    of ``stop_words_``.
 
     Examples
     --------
@@ -1179,6 +1186,7 @@ class CountVectorizer(_VectorizerMixin, BaseEstimator):
         max_df=1.0,
         min_df=1,
         max_features=None,
+        save_removed_terms=True,
         vocabulary=None,
         binary=False,
         dtype=np.int64,
@@ -1196,6 +1204,7 @@ class CountVectorizer(_VectorizerMixin, BaseEstimator):
         self.max_df = max_df
         self.min_df = min_df
         self.max_features = max_features
+        self.save_removed_terms = save_removed_terms
         self.ngram_range = ngram_range
         self.vocabulary = vocabulary
         self.binary = binary
@@ -1248,7 +1257,8 @@ class CountVectorizer(_VectorizerMixin, BaseEstimator):
                 vocabulary[term] = new_indices[old_index]
             else:
                 del vocabulary[term]
-                removed_terms.add(term)
+                if self.save_removed_terms:
+                    removed_terms.add(term)
         kept_indices = np.where(mask)[0]
         if len(kept_indices) == 0:
             raise ValueError(
@@ -1884,6 +1894,11 @@ class TfidfVectorizer(CountVectorizer):
 
         This parameter is ignored if vocabulary is not None.
 
+    save_removed_terms : bool, default=True
+        If True, attribute ``stop_words_`` will be generated with terms removed
+        during pruning and will be pickled with model unless explicity deleted
+        beforehand.
+
     vocabulary : Mapping or iterable, default=None
         Either a Mapping (e.g., a dict) where keys are terms and values are
         indices in the feature matrix, or an iterable over terms. If not
@@ -1952,7 +1967,9 @@ class TfidfVectorizer(CountVectorizer):
     -----
     The ``stop_words_`` attribute can get large and increase the model size
     when pickling. This attribute is provided only for introspection and can
-    be safely removed using delattr or set to None before pickling.
+    be safely removed using delattr or set to None before pickling. Use
+    parameter ``save_removed_terms=False`` to forego creation and serialization
+    of ``stop_words_``.
 
     Examples
     --------
@@ -1999,6 +2016,7 @@ class TfidfVectorizer(CountVectorizer):
         max_df=1.0,
         min_df=1,
         max_features=None,
+        save_removed_terms=True,
         vocabulary=None,
         binary=False,
         dtype=np.float64,
@@ -2022,6 +2040,7 @@ class TfidfVectorizer(CountVectorizer):
             max_df=max_df,
             min_df=min_df,
             max_features=max_features,
+            save_removed_terms=save_removed_terms,
             vocabulary=vocabulary,
             binary=binary,
             dtype=dtype,
