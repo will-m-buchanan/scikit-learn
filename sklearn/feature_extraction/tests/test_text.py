@@ -846,6 +846,29 @@ def test_vectorizer_min_df():
     assert len(vect.stop_words_) == 5
 
 
+@pytest.mark.parametrize("Vectorizer", (CountVectorizer, TfidfVectorizer))
+def test_vectorizer_save_removed_terms(Vectorizer):
+    expected_stop_words = {
+        "celeri",
+        "tomato",
+        "copyright",
+        "coke",
+        "sparkling",
+        "water",
+        "the",
+    }
+
+    # test stop_words_ generated
+    vectorizer = Vectorizer(max_df=0.6, max_features=4, save_removed_terms=True)
+    vectorizer.fit(ALL_FOOD_DOCS)
+    assert vectorizer.stop_words_ == expected_stop_words
+
+    # test stop_words_ not generated
+    vectorizer = Vectorizer(max_df=0.6, max_features=4, save_removed_terms=False)
+    vectorizer.fit(ALL_FOOD_DOCS)
+    assert vectorizer.stop_words_ == set()
+
+
 def test_count_binary_occurrences():
     # by default multiple occurrences are counted as longs
     test_data = ["aaabc", "abbde"]
