@@ -1058,9 +1058,9 @@ class CountVectorizer(_VectorizerMixin, BaseEstimator):
         This parameter is ignored if vocabulary is not None.
 
     save_removed_terms : bool, default=True
-        If True, attribute ``stop_words_`` will be generated with terms removed
-        during pruning and will be pickled with model unless explicity deleted
-        beforehand.
+        If True, attribute ``stop_words_`` will be generated with terms that
+        were removed during pruning. In this case, ``stop_words_`` will also be
+        pickled with the model unless explicity deleted beforehand.
 
     vocabulary : Mapping or iterable, default=None
         Either a Mapping (e.g., a dict) where keys are terms and values are
@@ -1093,7 +1093,8 @@ class CountVectorizer(_VectorizerMixin, BaseEstimator):
           - occurred in too few documents (`min_df`)
           - were cut off by feature selection (`max_features`).
 
-        This is only available if no vocabulary was given.
+        This is only available if no vocabulary was given and if
+        ``save_removed_terms`` is True.
 
     See Also
     --------
@@ -1107,9 +1108,9 @@ class CountVectorizer(_VectorizerMixin, BaseEstimator):
     -----
     The ``stop_words_`` attribute can get large and increase the model size
     when pickling. This attribute is provided only for introspection and can
-    be safely removed using delattr or set to None before pickling. Use
-    parameter ``save_removed_terms=False`` to forego creation and serialization
-    of ``stop_words_``.
+    be safely removed using delattr or set to None before pickling. Set
+    parameter ``save_removed_terms`` to False to forego creation and
+    serialization of ``stop_words_``.
 
     Examples
     --------
@@ -1895,9 +1896,9 @@ class TfidfVectorizer(CountVectorizer):
         This parameter is ignored if vocabulary is not None.
 
     save_removed_terms : bool, default=True
-        If True, attribute ``stop_words_`` will be generated with terms removed
-        during pruning and will be pickled with model unless explicity deleted
-        beforehand.
+        If True, attribute ``stop_words_`` will be generated with terms that
+        were removed during pruning. In this case, ``stop_words_`` will also be
+        pickled with the model unless explicity deleted beforehand.
 
     vocabulary : Mapping or iterable, default=None
         Either a Mapping (e.g., a dict) where keys are terms and values are
@@ -1954,7 +1955,8 @@ class TfidfVectorizer(CountVectorizer):
           - occurred in too few documents (`min_df`)
           - were cut off by feature selection (`max_features`).
 
-        This is only available if no vocabulary was given.
+        This is only available if no vocabulary was given and if
+        ``save_removed_terms`` is True.
 
     See Also
     --------
@@ -1967,9 +1969,9 @@ class TfidfVectorizer(CountVectorizer):
     -----
     The ``stop_words_`` attribute can get large and increase the model size
     when pickling. This attribute is provided only for introspection and can
-    be safely removed using delattr or set to None before pickling. Use
-    parameter ``save_removed_terms=False`` to forego creation and serialization
-    of ``stop_words_``.
+    be safely removed using delattr or set to None before pickling. Set
+    parameter ``save_removed_terms`` to False to forego creation and
+    serialization of ``stop_words_``.
 
     Examples
     --------
